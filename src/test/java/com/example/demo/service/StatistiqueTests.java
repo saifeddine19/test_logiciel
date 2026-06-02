@@ -4,6 +4,7 @@ import com.example.demo.data.Voiture;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import static org.mockito.Mockito.*;
 
@@ -18,8 +19,8 @@ public class StatistiqueTests {
         StatistiqueImpl statistique = new StatistiqueImpl();
 
         // Création des mocks
-        Voiture voitureMock1 = Mockito.mock(Voiture.class);
-        Voiture voitureMock2 = Mockito.mock(Voiture.class);
+        Voiture voitureMock1 =mock(Voiture.class);
+        Voiture voitureMock2 =mock(Voiture.class);
 
         // On donne le comportement aux mocks
         when(voitureMock1.getPrix()).thenReturn(5000);
