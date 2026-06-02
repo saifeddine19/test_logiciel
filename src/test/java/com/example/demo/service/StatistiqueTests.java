@@ -11,7 +11,29 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 public class StatistiqueTests {
 
-    @MockBean
-    StatistiqueImpl statistiqueImpl;
+    @Test
+    void testPrixMoyen() {
+
+        // Instance réelle pour tester
+        StatistiqueImpl statistique = new StatistiqueImpl();
+
+        // Création des mocks
+        Voiture voitureMock1 = Mockito.mock(Voiture.class);
+        Voiture voitureMock2 = Mockito.mock(Voiture.class);
+
+        // On donne le comportement aux mocks
+        when(voitureMock1.getPrix()).thenReturn(5000);
+        when(voitureMock2.getPrix()).thenReturn(15000);
+
+        // On les ajoute à notre instance de statistique
+        statistique.ajouter(voitureMock1);
+        statistique.ajouter(voitureMock2);
+
+        Echantillon resultat = statistique.prixMoyen();
+
+        // On vérifie les résultats
+        assertEquals(2, resultat.getNombreDeVoitures());
+        assertEquals(10000, resultat.getPrixMoyen());
+    }
 
 }
