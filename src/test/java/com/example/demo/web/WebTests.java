@@ -67,4 +67,21 @@ class WebTests {
                .andReturn();
     }
 
+    @Test
+    public void postVoitureErreur() throws Exception {
+        
+        doThrow(new RuntimeException("Base de données en panne"))
+            .when(statistique).ajouter(any(Voiture.class));
+
+        String jsonContent = "{\"marque\":\"f\",\"prix\":100}";
+
+        
+        mockMvc.perform(post("/voiture")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonContent))
+                .andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andReturn();
+    }
+
 }
