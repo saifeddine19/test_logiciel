@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 class WebTests {
+    
 
     @MockBean
     StatistiqueImpl statistiqueImpl;
@@ -28,40 +29,43 @@ class WebTests {
     MockMvc mockMvc;
 
     @Test
-    public void TestGetStatistiques() throws Exception{
-
-        doNoting().when(statistiqueImpl).ajouter(new Voiture("Mercedes","20000"));
-        doNoting().when(statistiqueImpl).ajouter(new Voiture("Ferrari","5000"));
-        when(statistiqueImpl.prixMoyen()).thenReturn(new Echantillon(2,25000));
-        mockMvc.perfom(get("/statisque"))
+    public void TestGetStatistiques() throws Exception {
+        doNothing().when(statistiqueImpl).ajouter(new Voiture("Mercedes", "20000"));
+        doNothing().when(statistiqueImpl).ajouter(new Voiture("Ferrari", "5000"));
+        
+        when(statistiqueImpl.prixMoyen()).thenReturn(new Echantillon(2, 25000));
+        
+        mockMvc.perform(get("/statistique")) 
                .andDo(print())
                .andExpect(status().isOk())
-               .andExpect(jsonPath("$.nombreDeVoitures").value("2"));
-               .andExpect(jsonPath("$.prixMoyen").value("12500"));
+               .andExpect(jsonPath("$.nombreDeVoitures").value("2"))
+               .andExpect(jsonPath("$.prixMoyen").value("25000")) /
                .andReturn();
     }
 
     @Test
-    public void TestGetStatistiquesErreur() throws Exception{
-
+    public void TestGetStatistiquesErreur() throws Exception {
         when(statistiqueImpl.prixMoyen()).thenThrow(new ArithmeticException());
         
-        mockMvc.perfom(get("/statisque"))
+        mockMvc.perform(get("/statistique")) 
                .andDo(print())
                .andExpect(status().isInternalServerError())
                .andReturn();
     }
 
     @Test
-    public void TestPostVoiture() {
+    public void TestPostVoiture() throws Exception { 
 
-        doNoting.when(statistiqueImpl).ajouter(new Voiture("f","100"));
+        doNothing().when(statistiqueImpl).ajouter(new Voiture("f", "100")); 
 
-        String jsonContent = """{"marques":"f","prix":"100"}""";
+        String jsonContent = """
+        {"marque":"f","prix":100}
+        """;
 
-        mockMvc.perfom(post("/voiture"))
+        
+        mockMvc.perform(post("/voiture")
                .contentType(MediaType.APPLICATION_JSON)
-               .content(jsonContent)
+               .content(jsonContent))
                .andDo(print())
                .andExpect(status().isOk())
                .andReturn();
@@ -71,10 +75,11 @@ class WebTests {
     public void TestPostVoitureErreur() throws Exception {
         
         doThrow(new RuntimeException("Base de données en panne"))
-            .when(statistique).ajouter(any(Voiture.class));
+            .when(statistiqueImpl).ajouter(any(Voiture.class)); 
 
-        String jsonContent = "{\"marque\":\"f\",\"prix\":100}";
-
+        String jsonContent = """
+        {"marque":"f","prix":100}
+        """;
         
         mockMvc.perform(post("/voiture")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -83,5 +88,4 @@ class WebTests {
                 .andExpect(status().isInternalServerError())
                 .andReturn();
     }
-
 }
