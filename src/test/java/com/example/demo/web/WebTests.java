@@ -41,4 +41,15 @@ class WebTests {
                .andReturn();
     }
 
+    @Test
+    public void getStatistiquesErreur() throws Exception{
+        
+        when(statistiqueImpl.prixMoyen()).thenThrow(new ArithmeticException());
+        
+        mockMvc.perfom(get("/statisque"))
+               .andDo(print())
+               .andExpect(status().isInternalServerError())
+               .andReturn();
+    }
+
 }
