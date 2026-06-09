@@ -28,7 +28,7 @@ class WebTests {
     MockMvc mockMvc;
 
     @Test
-    public void getStatistiques() throws Exception{
+    public void TestGetStatistiques() throws Exception{
 
         doNoting().when(statistiqueImpl).ajouter(new Voiture("Mercedes","20000"));
         doNoting().when(statistiqueImpl).ajouter(new Voiture("Ferrari","5000"));
@@ -42,7 +42,7 @@ class WebTests {
     }
 
     @Test
-    public void getStatistiquesErreur() throws Exception{
+    public void TestGetStatistiquesErreur() throws Exception{
 
         when(statistiqueImpl.prixMoyen()).thenThrow(new ArithmeticException());
         
@@ -53,7 +53,7 @@ class WebTests {
     }
 
     @Test
-    public void postVoiture() {
+    public void TestPostVoiture() {
 
         doNoting.when(statistiqueImpl).ajouter(new Voiture("f","100"));
 
@@ -68,7 +68,7 @@ class WebTests {
     }
 
     @Test
-    public void postVoitureErreur() throws Exception {
+    public void TestPostVoitureErreur() throws Exception {
         
         doThrow(new RuntimeException("Base de données en panne"))
             .when(statistique).ajouter(any(Voiture.class));
