@@ -43,12 +43,27 @@ class WebTests {
 
     @Test
     public void getStatistiquesErreur() throws Exception{
-        
+
         when(statistiqueImpl.prixMoyen()).thenThrow(new ArithmeticException());
         
         mockMvc.perfom(get("/statisque"))
                .andDo(print())
                .andExpect(status().isInternalServerError())
+               .andReturn();
+    }
+
+    @Test
+    public void postVoiture() {
+
+        doNoting.when(statistiqueImpl).ajouter(new Voiture("f","100"));
+
+        String jsonContent = """{"marques":"f","prix":"100"}""";
+
+        mockMvc.perfom(post("/voiture"))
+               .contentType(MediaType.APPLICATION_JSON)
+               .content(jsonContent)
+               .andDo(print())
+               .andExpect(status().isOk())
                .andReturn();
     }
 
