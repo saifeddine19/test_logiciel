@@ -30,16 +30,16 @@ class WebTests {
 
     @Test
     public void TestGetStatistiques() throws Exception {
-        doNothing().when(statistiqueImpl).ajouter(new Voiture("Mercedes", "20000"));
-        doNothing().when(statistiqueImpl).ajouter(new Voiture("Ferrari", "5000"));
+        doNothing().when(statistiqueImpl).ajouter(new Voiture("Mercedes", 20000));
+        doNothing().when(statistiqueImpl).ajouter(new Voiture("Ferrari", 5000));
         
         when(statistiqueImpl.prixMoyen()).thenReturn(new Echantillon(2, 25000));
         
         mockMvc.perform(get("/statistique")) 
                .andDo(print())
                .andExpect(status().isOk())
-               .andExpect(jsonPath("$.nombreDeVoitures").value("2"))
-               .andExpect(jsonPath("$.prixMoyen").value("25000")) /
+               .andExpect(jsonPath("$.nombreDeVoitures").value(2))
+               .andExpect(jsonPath("$.prixMoyen").value(25000)) 
                .andReturn();
     }
 
@@ -56,7 +56,7 @@ class WebTests {
     @Test
     public void TestPostVoiture() throws Exception { 
 
-        doNothing().when(statistiqueImpl).ajouter(new Voiture("f", "100")); 
+        doNothing().when(statistiqueImpl).ajouter(new Voiture("f", 100)); 
 
         String jsonContent = """
         {"marque":"f","prix":100}
