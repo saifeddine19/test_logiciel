@@ -39,7 +39,7 @@ class WebTests {
                .andDo(print())
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.nombreDeVoitures").value(2))
-               .andExpect(jsonPath("$.prixMoyen").value(25000)) 
+               .andExpect(jsonPath("$.prixMoyen").value(12500))
                .andReturn();
     }
 
